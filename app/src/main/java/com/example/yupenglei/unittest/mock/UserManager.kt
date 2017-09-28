@@ -12,11 +12,12 @@ class UserManager {
 
     fun performLoginCallbackVersion(username: String, password: String, callback: NetWorkCallback) {
         Thread.sleep(5000)
-        if (Random().nextBoolean()) callback.onSuccess() else callback.onFailed()
+        if (Random().nextBoolean()) callback.onSuccess("This is data")
+        else callback.onFailed(404, "not fund")
     }
 
     interface NetWorkCallback {
-        fun onSuccess()
-        fun onFailed()
+        fun onSuccess(data: Any)
+        fun onFailed(error: Int, msg: String)
     }
 }

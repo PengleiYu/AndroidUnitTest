@@ -26,12 +26,12 @@ class LoginPresenter {
         if (username.isEmpty()) return
         if (!passwordValidator.verifyPassword(password)) return
         userManager.performLoginCallbackVersion(username, password, object : UserManager.NetWorkCallback {
-            override fun onSuccess() {
-                println("onSuccess")
+            override fun onSuccess(data: Any) {
+                println("onSuccess: $data")
             }
 
-            override fun onFailed() {
-                println("onFailed")
+            override fun onFailed(error: Int, msg: String) {
+                println("onFailed: $error -> $msg")
             }
         })
     }

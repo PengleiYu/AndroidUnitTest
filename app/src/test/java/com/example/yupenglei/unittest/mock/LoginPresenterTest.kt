@@ -40,8 +40,21 @@ class LoginPresenterTest {
 
         Mockito.verify(mockUserManager).performLogin(username, pwd)
     }
-    @Test fun loginCallbackVersion(){
-        
+
+    @Test fun loginCallbackVersion() {
+        val mockValidator = Mockito.mock(PasswordValidator::class.java)
+        Mockito.`when`(mockValidator.verifyPassword(Mockito.anyString())).thenReturn(true)
+        val mockUserManager = Mockito.mock(UserManager::class.java)
+        Mockito.doAnswer {
+            val callback = it.arguments[2] as UserManager.NetWorkCallback
+            callback.onFailed(500, "server error")
+            return@doAnswer 22
+        }.`when`(mockUserManager.performLoginCallbackVersion(Mockito.anyString(),
+                Mockito.anyString(), Mockito.any(UserManager.NetWorkCallback::class.java)
+        ))
+
+        val loginPresenter = LoginPresenter()
+        loginPresenter.loginCallbackVersion(username, password)
     }
 
 }
