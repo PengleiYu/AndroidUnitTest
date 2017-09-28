@@ -14,4 +14,6 @@ class PasswordValidator {
         Thread.sleep(5000)
         return Random().nextBoolean()
     }
+
+    fun verifyPassword2(password: String): Boolean = password == "Hello"
 }

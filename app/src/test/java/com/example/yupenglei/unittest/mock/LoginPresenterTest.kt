@@ -1,8 +1,8 @@
 package com.example.yupenglei.unittest.mock
 
 import com.nhaarman.mockito_kotlin.*
+import org.junit.Assert
 import org.junit.Test
-import org.mockito.Mockito
 
 /**
  * Created by yupenglei on 17/9/28.
@@ -62,5 +62,26 @@ class LoginPresenterTest {
         LoginPresenter().apply { passwordValidator = mockValidator }
                 .apply { userManager = mockUserManager }
                 .loginCallbackVersion(username, password)
+    }
+
+    @Test fun testRealFunction() {
+        val mockValidator: PasswordValidator = mock {
+            on { verifyPassword(any()) }
+                    .thenCallRealMethod()
+//                    .thenReturn(true)
+        }
+//        Assert.assertEquals(mockValidator.verifyPassword(""), true)
+        mockValidator.verifyPassword("hello")
+        verify(mockValidator).verifyPassword("hello")
+    }
+
+    @Test fun testSpy() {
+        //spy与mock的不同在于spy默认调用真实函数，mock默认调用空方法，返回默认值
+        val spyValidator: PasswordValidator = spy()
+        Assert.assertEquals(spyValidator.verifyPassword2("Hello"), true)
+        Assert.assertEquals(spyValidator.verifyPassword2("Hello2"), false)
+
+        whenever(spyValidator.verifyPassword2("Hello")).thenReturn(false)
+        Assert.assertEquals(spyValidator.verifyPassword2("Hello"), false)
     }
 }
